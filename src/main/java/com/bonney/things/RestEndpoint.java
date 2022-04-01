@@ -1,8 +1,5 @@
 package com.bonney.things;
 
-import java.util.UUID;
-import java.util.function.Function;
-
 import com.bonney.things.domain.Games;
 import com.bonney.things.domain.Player;
 import com.bonney.things.dto.AnswerDto;
@@ -11,10 +8,12 @@ import com.bonney.things.dto.PlayerDto;
 import com.bonney.things.state.Game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
-
 import io.javalin.Javalin;
 import io.javalin.core.validation.JavalinValidation;
 import io.javalin.http.Context;
+
+import java.util.UUID;
+import java.util.function.Function;
 
 public class RestEndpoint {
 
@@ -32,11 +31,11 @@ public class RestEndpoint {
 
     private void mapEndpoints(Javalin javalin) {
         javalin.post("game", this::newGame);
-        javalin.get("game/:gameId", this::getGame);
-        javalin.post("game/:gameId/player", this::join);
-        javalin.post("game/:gameId/round", this::newRound);
-        javalin.post("game/:gameId/round/current", this::startRound);
-        javalin.post("game/:gameId/round/current/answer", this::submitAnswer);
+        javalin.get("game/{gameId}", this::getGame);
+        javalin.post("game/{gameId}/player", this::join);
+        javalin.post("game/{gameId}/round", this::newRound);
+        javalin.post("game/{gameId}/round/current", this::startRound);
+        javalin.post("game/{gameId}/round/current/answer", this::submitAnswer);
     }
 
     private void newGame(Context context) {
@@ -94,6 +93,6 @@ public class RestEndpoint {
     }
 
     private UUID getGameId(Context context) {
-        return context.pathParam("gameId", UUID.class).get();
+        return context.pathParamAsClass("gameId", UUID.class).get();
     }
 }
